@@ -499,7 +499,7 @@ export interface AuditRecord {
   createdAt: string;
   status: 'processing' | 'completed' | 'failed';
   errorMessage?: string;
-  isPaid: boolean;
+  isPaid?: boolean;
   userEmail?: string;
   overallScore: number;
   gradingCriteria?: 'strict' | 'standard';
@@ -522,47 +522,14 @@ export interface AuditRecord {
   trackingAudit?: WebTrackingAudit;
 }
 
-export interface UserCredits {
-  email: string;
-  remainingCredits: number;
-  totalPurchased: number;
-}
-
-export interface PricingPlan {
-  id: string;
-  name: string;
-  price: number;
-  audits: number;
-  description: string;
-  popular?: boolean;
-}
-
-export interface PaddleConfig {
-  clientToken: string;
-  environment: 'sandbox' | 'production';
-  isConfigured: boolean;
-}
-
 export interface AdminStats {
   totalAudits: number;
-  paidAudits: number;
-  freeScans: number;
-  totalRevenue: number;
-  conversionRate: number;
   totalUsers: number;
   topDomains: Array<{ domain: string; count: number }>;
-  recentPurchases: Array<{
-    id: string;
-    email: string;
-    plan: string;
-    amount: number;
-    createdAt: string;
-  }>;
   recentAudits: Array<{
     id: string;
     url: string;
     overallScore: number;
-    isPaid: boolean;
     createdAt: string;
   }>;
   apiHealth: {

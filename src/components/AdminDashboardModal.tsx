@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { X, DollarSign, Users, FileText, CheckCircle2, TrendingUp, Globe, Activity, RefreshCw, Eye } from 'lucide-react';
-import { AdminStats, AuditRecord } from '../types.js';
+import { X, Users, FileText, Globe, Activity, RefreshCw, Eye } from 'lucide-react';
+import { AdminStats } from '../types.js';
 
 interface AdminDashboardModalProps {
   isOpen: boolean;
@@ -15,7 +15,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
 }) => {
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [secret, setSecret] = useState('');
+  const [secret] = useState('');
 
   const fetchStats = async () => {
     setIsLoading(true);
@@ -61,8 +61,8 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
               <Activity className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-xl font-black uppercase tracking-tight text-white">WebsiteXRay SaaS Telemetry & Admin</h2>
-              <p className="text-xs text-slate-400 font-mono">Real-time revenue, conversion telemetry, and audit inspection.</p>
+              <h2 className="text-xl font-black uppercase tracking-tight text-white">WebsiteXRay Audit Telemetry & Admin</h2>
+              <p className="text-xs text-slate-400 font-mono">Real-time scan usage, active systems, and audit inspection.</p>
             </div>
           </div>
 
@@ -79,76 +79,39 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
         {stats ? (
           <div className="space-y-6">
             {/* Top Metric Cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 font-mono">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono">
               <div className="p-3.5 rounded-sm bg-[#05070A] border border-white/10">
-                <span className="text-[10px] uppercase font-bold text-slate-500">Total Audits</span>
+                <span className="text-[10px] uppercase font-bold text-slate-500">Total Website Audits</span>
                 <div className="text-xl font-black text-white mt-0.5">{stats.totalAudits}</div>
               </div>
               <div className="p-3.5 rounded-sm bg-[#05070A] border border-white/10">
-                <span className="text-[10px] uppercase font-bold text-slate-500">Paid Audits</span>
-                <div className="text-xl font-black text-cyan-400 mt-0.5">{stats.paidAudits}</div>
-              </div>
-              <div className="p-3.5 rounded-sm bg-[#05070A] border border-white/10">
-                <span className="text-[10px] uppercase font-bold text-slate-500">Total Revenue</span>
-                <div className="text-xl font-black text-emerald-400 mt-0.5">${stats.totalRevenue}</div>
-              </div>
-              <div className="p-3.5 rounded-sm bg-[#05070A] border border-white/10">
-                <span className="text-[10px] uppercase font-bold text-slate-500">Conversion Rate</span>
-                <div className="text-xl font-black text-cyan-300 mt-0.5">{stats.conversionRate}%</div>
-              </div>
-              <div className="p-3.5 rounded-sm bg-[#05070A] border border-white/10">
-                <span className="text-[10px] uppercase font-bold text-slate-500">Total Users</span>
+                <span className="text-[10px] uppercase font-bold text-slate-500">Total Unique Users</span>
                 <div className="text-xl font-black text-purple-400 mt-0.5">{stats.totalUsers}</div>
               </div>
               <div className="p-3.5 rounded-sm bg-[#05070A] border border-white/10">
-                <span className="text-[10px] uppercase font-bold text-slate-500">Access Mode</span>
-                <div className="text-xs font-bold text-emerald-400 mt-1.5 flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400" /> 100% Free
+                <span className="text-[10px] uppercase font-bold text-slate-500">Platform Access Mode</span>
+                <div className="text-xs font-bold text-emerald-400 mt-2 flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" /> 100% Free Audit Platform
                 </div>
               </div>
             </div>
 
-            {/* Two Column Layout: Top Domains & Recent Purchases */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 font-mono">
-              {/* Top Audited Domains */}
-              <div className="p-4 rounded-sm bg-[#05070A] border border-white/10">
-                <h3 className="text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-1.5">
-                  <Globe className="w-3.5 h-3.5 text-cyan-400" /> Most Audited Websites
-                </h3>
-                <div className="space-y-2">
-                  {stats.topDomains.length > 0 ? (
-                    stats.topDomains.map((d, i) => (
-                      <div key={i} className="flex items-center justify-between p-2 rounded-sm bg-[#0A0D12] border border-white/5 text-xs">
-                        <span className="font-medium text-slate-200">{d.domain}</span>
-                        <span className="font-mono text-cyan-400 font-bold">{d.count} scan{d.count > 1 ? 's' : ''}</span>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-xs text-slate-500">No domain scan history yet.</p>
-                  )}
-                </div>
-              </div>
-
-              {/* Recent Purchases */}
-              <div className="p-4 rounded-sm bg-[#05070A] border border-white/10">
-                <h3 className="text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-1.5">
-                  <DollarSign className="w-3.5 h-3.5 text-emerald-400" /> Recent Purchases
-                </h3>
-                <div className="space-y-2">
-                  {stats.recentPurchases.length > 0 ? (
-                    stats.recentPurchases.map((p, i) => (
-                      <div key={i} className="flex items-center justify-between p-2 rounded-sm bg-[#0A0D12] border border-white/5 text-xs">
-                        <div>
-                          <div className="font-medium text-white">{p.email}</div>
-                          <span className="text-[10px] text-slate-500 uppercase">{p.plan}</span>
-                        </div>
-                        <span className="font-mono font-bold text-emerald-400">${p.amount}</span>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-xs text-slate-500">No purchases recorded yet.</p>
-                  )}
-                </div>
+            {/* Layout: Most Audited Websites */}
+            <div className="p-4 rounded-sm bg-[#05070A] border border-white/10 font-mono">
+              <h3 className="text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-1.5">
+                <Globe className="w-3.5 h-3.5 text-cyan-400" /> Most Audited Websites
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {stats.topDomains.length > 0 ? (
+                  stats.topDomains.map((d, i) => (
+                    <div key={i} className="flex items-center justify-between p-2 rounded-sm bg-[#0A0D12] border border-white/5 text-xs">
+                      <span className="font-medium text-slate-200">{d.domain}</span>
+                      <span className="font-mono text-cyan-400 font-bold">{d.count} scan{d.count > 1 ? 's' : ''}</span>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-xs text-slate-500">No domain scan history yet.</p>
+                )}
               </div>
             </div>
 
@@ -163,7 +126,6 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                     <tr className="border-b border-white/10 text-slate-500 font-mono uppercase text-[10px]">
                       <th className="p-2 font-bold">URL</th>
                       <th className="p-2 font-bold">Score</th>
-                      <th className="p-2 font-bold">Status</th>
                       <th className="p-2 font-bold">Date</th>
                       <th className="p-2 font-bold text-right">Action</th>
                     </tr>
@@ -173,11 +135,6 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                       <tr key={a.id} className="hover:bg-white/5">
                         <td className="p-2 text-slate-200 truncate max-w-xs">{a.url}</td>
                         <td className="p-2 font-black text-white">{a.overallScore}/100</td>
-                        <td className="p-2">
-                          <span className={`px-1.5 py-0.5 rounded-sm text-[10px] font-bold uppercase ${a.isPaid ? 'bg-cyan-500/20 text-cyan-300' : 'bg-white/10 text-slate-400'}`}>
-                            {a.isPaid ? 'Paid Unlocked' : 'Free Preview'}
-                          </span>
-                        </td>
                         <td className="p-2 text-slate-400 text-[11px]">{new Date(a.createdAt).toLocaleTimeString()}</td>
                         <td className="p-2 text-right">
                           <button
