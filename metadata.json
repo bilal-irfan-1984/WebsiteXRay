@@ -1,0 +1,6 @@
+{
+  "name": "WebsiteXRay",
+  "description": "100% free AI-powered website audit tool for SEO, performance, UX, accessibility, and conversion analysis with instant comprehensive reports, Core Web Vitals grading, interactive to-do checklist, and executive PDF export.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
