@@ -1,5 +1,6 @@
-import React from 'react';
-import { Sparkles, ArrowRight, BarChart2, CheckCircle2 } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Sparkles, ArrowRight, BarChart2, CheckCircle2, LogOut, User, Key } from 'lucide-react';
+import { useAppAuth } from './ClerkAuthProvider.js';
 
 interface NavbarProps {
   onOpenAdmin: () => void;
@@ -13,6 +14,21 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenAdmin,
   onScrollToSection,
 }) => {
+  const { user, signOut } = useAppAuth();
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowUserMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, []);
+
   return (
     <header className="sticky top-0 z-40 w-full border-b border-white/5 bg-[#0A0D12]/95 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 h-16 flex items-center justify-between">
@@ -93,6 +109,62 @@ export const Navbar: React.FC<NavbarProps> = ({
             <BarChart2 className="w-4 h-4" />
           </button>
 
+          {/* Clerk Authenticated User Menu */}
+          {user && (
+            <div className="relative font-mono" ref={menuRef}>
+              <button
+                onClick={() => setShowUserMenu(!showUserMenu)}
+                className="flex items-center gap-2 p-1.5 rounded-sm bg-[#080A0F] border border-white/10 hover:border-cyan-500/30 text-slate-400 hover:text-white transition-all cursor-pointer"
+              >
+                <img
+                  src={user.imageUrl || `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(user.email)}`}
+                  alt="Avatar"
+                  className="w-5 h-5 rounded-full bg-[#05070A] border border-white/15"
+                />
+                <span className="text-[10px] font-bold uppercase tracking-wider hidden md:inline max-w-[120px] truncate">
+                  {user.fullName.split(' ')[0]}
+                </span>
+              </button>
+
+              {showUserMenu && (
+                <div className="absolute right-0 mt-2 w-64 bg-[#0A0D12] border border-white/10 rounded-sm shadow-2xl p-4 space-y-3.5 z-50 text-left animate-in fade-in duration-150">
+                  <div className="border-b border-white/5 pb-3">
+                    <div className="text-xs font-black text-white uppercase truncate">{user.fullName}</div>
+                    <div className="text-[10px] text-slate-500 truncate mt-0.5">{user.email}</div>
+                    {user.isDemoUser && (
+                      <span className="inline-flex items-center gap-1 mt-1.5 px-1.5 py-0.5 rounded-sm bg-amber-500/10 border border-amber-500/30 text-[9px] font-bold text-amber-400 uppercase tracking-widest">
+                        <Key className="w-2.5 h-2.5" /> Sandbox Account
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="space-y-1">
+                    <button
+                      onClick={() => {
+                        setShowUserMenu(false);
+                        onScrollToSection('hero-section');
+                      }}
+                      className="w-full text-left px-2 py-1.5 rounded-sm hover:bg-white/5 text-[10px] text-slate-300 hover:text-white uppercase tracking-wider transition-colors flex items-center gap-2"
+                    >
+                      <User className="w-3.5 h-3.5 text-cyan-400" />
+                      <span>My Audit Center</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowUserMenu(false);
+                        signOut();
+                      }}
+                      className="w-full text-left px-2 py-1.5 rounded-sm hover:bg-red-500/10 text-[10px] text-slate-400 hover:text-red-400 uppercase tracking-wider transition-colors flex items-center gap-2"
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                      <span>Sign Out Account</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Scan CTA */}
           <button
             id="btn-nav-scan-cta"
@@ -107,3 +179,4 @@ export const Navbar: React.FC<NavbarProps> = ({
     </header>
   );
 };
+
