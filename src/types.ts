@@ -463,6 +463,47 @@ export interface TodoItem {
   recommendationId?: string;
 }
 
+export interface WebsiteStrength {
+  title: string;
+  description: string;
+}
+
+export interface TopPriorityItem {
+  priority: number;
+  severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
+  title: string;
+  problem: string;
+  whyItMatters: string;
+  recommendation: string;
+  impact: 'Very High' | 'High' | 'Medium' | 'Low';
+  effort: 'Quick Win' | 'Low' | 'Medium' | 'High';
+}
+
+export interface QuickWinItem {
+  title: string;
+  description: string;
+  impact: 'Very High' | 'High' | 'Medium' | 'Low';
+}
+
+export interface SectorInsight {
+  title: string;
+  severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW' | 'GOOD';
+  description: string;
+  recommendation: string;
+}
+
+export interface CompetitorInsightItem {
+  title: string;
+  description: string;
+  recommendation: string;
+}
+
+export interface ActionPlanStep {
+  step: number;
+  action: string;
+  reason: string;
+}
+
 export interface AIAnalysisReport {
   executiveSummary: string;
   observedFacts: string[];
@@ -477,6 +518,18 @@ export interface AIAnalysisReport {
   todoChecklist?: TodoItem[];
   top3Fixes?: Array<{ issue: string; explanation: string }>;
   overallRecommendation?: string;
+
+  // New strict JSON structure fields
+  websiteStrengths?: WebsiteStrength[];
+  topPriorities?: TopPriorityItem[];
+  quickWins?: QuickWinItem[];
+  seoInsights?: SectorInsight[];
+  performanceInsights?: SectorInsight[];
+  accessibilityInsights?: SectorInsight[];
+  uxInsights?: SectorInsight[];
+  securityInsights?: SectorInsight[];
+  competitorInsights?: CompetitorInsightItem[];
+  finalActionPlan?: ActionPlanStep[];
 }
 
 export interface CompetitorComparison {
